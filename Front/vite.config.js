@@ -7,5 +7,6 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',   // Asegura que Vite escuche en todas las interfaces
     port: process.env.PORT || 5173,  // Usa el puerto de Render o 5173 como fallback
+    allowedHosts: ['pwas-idb9.onrender.com'],  // Agrega el host de Render a los permitidos
   },
 })
