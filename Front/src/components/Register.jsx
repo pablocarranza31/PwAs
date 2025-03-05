@@ -16,7 +16,7 @@ function Register() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://servertest-tnt7.onrender.com/api/users/registro', {
+      const response = await fetch('https://pwasb.onrender.com/api/users/registro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
