@@ -17,7 +17,7 @@ navigator.serviceWorker.register('./sw.js',{type:'module'})
         .then(res=>res.toJSON())
         .then(async json=>{//json tiene la suscripion
           //guuardar suscrpcion
-          const response = await fetch('http://localhost:3000/api/subs/suscripcion',{
+          const response = await fetch('https://pwasb.onrender.com/api/subs/suscripcion',{
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({ suscripcion: json })
