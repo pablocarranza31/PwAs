@@ -1,0 +1,36 @@
+{
+    "name": "Mi Aplicación Perrona",
+    "short_name": "Perrona",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#6200ea",
+    "icons": [
+      {
+        "src": "/icons/logoutzmg192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/logoutzmg32x32.png",
+        "sizes": "32x32",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": 
+    [
+    {
+      "src": "/icons/interface1.png",
+      "sizes": "1920x1030",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+        "src": "/icons/interface.png",
+        "sizes": "1920x1030",
+        "type": "image/png",
+        "form_factor": "narrow"
+      }
+    ]
+  }
+  
