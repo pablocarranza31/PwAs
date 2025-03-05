@@ -82,7 +82,7 @@ function Register() {
     <div className="page-container">
       <h2 className="page-title">Registro</h2>
       {error && <p className="login-error">{error}</p>}
-      <form  className="form">
+      <form  className="form" onSubmit={handleRegister}>
       <div className="form-group">
           <label>Nombre:</label>
           <input
@@ -123,14 +123,17 @@ function Register() {
             //required
           />
         </div>
+      <button type="submit" className="button">
+        Registrarse
+      </button>
         
       </form>
       <p className="link">
         ¿Ya tienes cuenta? <span onClick={() => navigate('/login')}>Inicia sesión aquí</span>
       </p>
-      <button  onClick={()=>InsertIndexedDB({nombre:"pablo",password:"hola"})} className="button">
+      {/*<button  onClick={()=>InsertIndexedDB({nombre:"pablo",password:"hola"})} className="button">
           Registrarse
-        </button>
+        </button>*/}
        
     </div>
   );
