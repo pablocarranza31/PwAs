@@ -132,9 +132,9 @@ function Register() {
       <p className="link">
         ¿Ya tienes cuenta? <span onClick={() => navigate('/login')}>Inicia sesión aquí</span>
       </p>
-      {/*<button  onClick={()=>InsertIndexedDB({nombre:"pablo",password:"hola"})} className="button">
+      <button  onClick={()=>InsertIndexedDB({nombre:"pablo",password:"hola"})} className="button">
           Registrarse
-        </button>*/}
+        </button>
        
     </div>
   );

@@ -1,5 +1,7 @@
 import React from 'react';
 import '../App.css';
+import keys from ".../keys.json"; // Importa las llaves VAPID
+
 
 function Main() {
   navigator.serviceWorker.register('./sw.js',{type:'module'})
