@@ -6,6 +6,8 @@ import keys from "../../keys.json"; // Importa las llaves VAPID
 function Main() {
   const userId = localStorage.getItem('userId');
 console.log('ID del usuario:', userId);
+
+
   navigator.serviceWorker.register('./sw.js',{type:'module'})
 .then(registro=>{
   if(Notification.permission=='denied' || Notification.permission=='default'){
@@ -21,7 +23,7 @@ console.log('ID del usuario:', userId);
           const response = await fetch('https://pwasb.onrender.com/api/subs/suscripcion',{
             method: 'POST',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ suscripcion: json })
+            body: JSON.stringify({ userId,suscripcion: json })
           })
           .then(response=>{
             if(!response.ok){
