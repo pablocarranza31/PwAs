@@ -12,7 +12,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch('https://servertest-tnt7.onrender.com/api/users/login', {
+      const response = await fetch('https://pwasb.onrender.com/api/subs/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

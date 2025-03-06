@@ -27,9 +27,9 @@ function Register() {
       const data = await response.json();
 
       if (response.ok) {
-       // alert('Registro exitoso. Ahora puedes iniciar sesión.');
-        //navigate('/login');
-        console.log(data);
+       alert('Registro exitoso. Ahora puedes iniciar sesión.');
+        navigate('/login');
+       // console.log(data);
       } else {
         setError(data.message || 'Error al registrarte.');
       }
