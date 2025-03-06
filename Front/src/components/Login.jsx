@@ -23,6 +23,8 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
+      // Guardar solo el ID del usuario en localStorage
+      localStorage.setItem('userId', data.user._id);
         alert('Inicio de sesión exitoso');
         navigate('/main');
       } else {

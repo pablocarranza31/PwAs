@@ -4,6 +4,8 @@ import keys from "../../keys.json"; // Importa las llaves VAPID
 
 
 function Main() {
+  const userId = localStorage.getItem('userId');
+console.log('ID del usuario:', userId);
   navigator.serviceWorker.register('./sw.js',{type:'module'})
 .then(registro=>{
   if(Notification.permission=='denied' || Notification.permission=='default'){
