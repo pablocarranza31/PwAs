@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css'; // Archivo CSS para los estilos
-import axios from 'axios';
-import { json } from 'body-parser';
 
 function Login() {
   const navigate = useNavigate();
@@ -14,27 +12,17 @@ function Login() {
     e.preventDefault();
 
     try {
-      const opcions = {
-        method: 'POST',
-        url:'https://pwasb.onrender.com/api/subs/login',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data:{ email, password },
-      }
-      const data = await axios.request(opcions);
-     /* 
       const response = await fetch('https://pwasb.onrender.com/api/subs/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
-      });*/
+      });
  
-      //const data = await response.json();
+      const data = await response.json();
 
-      if (response) {
+      if (response.ok) {
       // Guardar solo el ID del usuario en localStorage
       localStorage.setItem('userId', data.user._id);
         alert('Inicio de sesión exitoso');

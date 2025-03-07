@@ -40,7 +40,7 @@ function InsertIndexedDB(data){
 
         resultado.onsuccess=event2=>
         {
-            console.log("insersion",event2.target.result);
+            //console.log("insersion",event2.target.result);
             self.registration.sync.register("syncLibros");
         }
     }
@@ -60,8 +60,10 @@ self.addEventListener("activate",event=>{
 
 self.addEventListener('fetch', event=>{
     
-    caches.match(event.request)
-    .then(console.log);
+    /*caches.match(event.request)
+    .then();*/
+    if (!event.request.url.startsWith("http")) return; // Evita errores con extensiones
+
 
     if (event.request.method === "POST") {
         event.request.clone().json()
@@ -88,7 +90,7 @@ self.addEventListener('fetch', event=>{
             
         })
         .catch(error=>{
-            console.log(error);
+            //console.log(error);
             self.registration.sync.register("insertar");
             return caches.match(event.request)
         });
