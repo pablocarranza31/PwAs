@@ -21,7 +21,7 @@ jobs:
 
       - name: Construir la imagen Docker
         run: |
-          docker build -f Front/Dockerfile -t ghcr.io/pablocarranza31/my-image-name:latest .
+          docker build -f Dockerfile -t ghcr.io/pablocarranza31/my-image-name:latest .
 
       - name: Subir la imagen a GHCR
         run: |
