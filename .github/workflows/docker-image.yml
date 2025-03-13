@@ -20,7 +20,8 @@ jobs:
 
     - name: Construir la imagen Docker
       run: |
-        docker build . --file Front/Dockerfile --tag ghcr.io/${{ github.repository_owner }}/my-image-name:latest Front
+        docker build -f Front/Dockerfile -t ghcr.io/${{ github.repository_owner }}/my-image-name:latest Front
+
 
     - name: Subir la imagen a GHCR
       run: |
