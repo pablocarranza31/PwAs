@@ -26,3 +26,4 @@ jobs:
       - name: Subir la imagen a GHCR
         run: |
           docker push ghcr.io/pablocarranza31/pwaimage:latest
+          
