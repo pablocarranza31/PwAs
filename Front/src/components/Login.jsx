@@ -25,6 +25,7 @@ function Login() {
       if (response.ok) {
       // Guardar solo el ID del usuario en localStorage
       localStorage.setItem('userId', data.user._id);
+      localStorage.setItem('userRole', data.user.role);
         alert('Inicio de sesión exitoso');
         navigate('/main');
       } else {

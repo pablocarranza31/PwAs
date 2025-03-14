@@ -5,6 +5,7 @@ import keys from "../../keys.json"; // Importa las llaves VAPID
 
 function Main() {
   const userId = localStorage.getItem('userId');
+  const userRole = localStorage.getItem('userRole'); // Obtener el rol del usuario
 console.log('ID del usuario:', userId);
 
 
@@ -54,6 +55,31 @@ console.log('ID del usuario:', userId);
       >
         Click
       </button>
+
+      {/* Mostrar tabla solo si el usuario es admin */}
+      {userRole === 'admin' && (
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Juan Pérez</td>
+              <td>juan@example.com</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>María Gómez</td>
+              <td>maria@example.com</td>
+            </tr>
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
