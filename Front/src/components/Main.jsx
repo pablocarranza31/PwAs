@@ -87,6 +87,9 @@ useEffect(() => {
                 <td>{user.id}</td>
                 <td>{user.nombre}</td>
                 <td>{user.email}</td>
+                <td>
+                  <button onClick={() => alert(`Acción para ${user.nombre}`)}>Acción</button>
+                </td>
               </tr>
             ))}
           </tbody>
