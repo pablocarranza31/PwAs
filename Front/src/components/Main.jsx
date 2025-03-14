@@ -69,6 +69,8 @@ useEffect(() => {
   registerServiceWorker();
 }, []);
 
+console.log(users);
+
   return (
     <div className="page-container">
       <h2 className="page-title">Bienvenid</h2>
