@@ -23,49 +23,51 @@ useEffect(() => {
   }
 }, [userRole]);
 
+const registerServiceWorker = async () => {
+  try {
+    const registro = await navigator.serviceWorker.register('./sw.js', { type: 'module' });
+    if (Notification.permission === 'denied' || Notification.permission === 'default') {
+      const permission = await Notification.requestPermission();
+      if (permission === 'granted') {
+        // ✅ Verificar si ya existe una suscripción
+        const existingSubscription = await registro.pushManager.getSubscription();
 
-navigator.serviceWorker.register('./sw.js', { type: 'module' })
-.then(async (registro) => {
-  if (Notification.permission === 'denied' || Notification.permission === 'default') {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-      
-      // ✅ Verificar si ya existe una suscripción
-      const existingSubscription = await registro.pushManager.getSubscription();
-      
-      if (!existingSubscription) {
-        console.log("No hay suscripción, creando una nueva...");
-        // Si no existe suscripción, se crea una nueva
-        registro.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: keys.publicKey
-        })
-        .then(res => res.toJSON())
-        .then(async json => {
-          try {
-            const response = await fetch('https://pwasb.onrender.com/api/subs/suscripcion', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ userId, suscripcion: json })
-            });
+        if (!existingSubscription) {
+          console.log("No hay suscripción, creando una nueva...");
+          // Si no existe suscripción, se crea una nueva
+          const subscription = await registro.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: keys.publicKey
+          });
 
-            if (!response.ok) {
-              throw new Error(`Error en la solicitud: ${response.status}`);
-            }
+          const json = subscription.toJSON();
+          // Enviar suscripción a la base de datos
+          const response = await fetch('https://pwasb.onrender.com/api/subs/suscripcion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId, suscripcion: json })
+          });
 
-            const data = await response.json();
-            console.log('Información guardada en la BD', data);
-          } catch (error) {
-            console.error('Error al enviar la suscripción', error);
+          if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status}`);
           }
-        });
-      } else {
-        console.log('El usuario ya está suscrito, no se crea una nueva.');
+
+          const data = await response.json();
+          console.log('Información guardada en la BD', data);
+        } else {
+          console.log('El usuario ya está suscrito, no se crea una nueva.');
+        }
       }
     }
+  } catch (error) {
+    console.error("Error al registrar el Service Worker:", error);
   }
-})
-.catch(error => console.error("Error al registrar el Service Worker:", error));
+};
+
+// Llamamos a la función de suscripción solo una vez, al montar el componente
+useEffect(() => {
+  registerServiceWorker();
+}, []);
 
   return (
     <div className="page-container">
