@@ -11,7 +11,7 @@ console.log('ID del usuario:', userId);
 
 useEffect(() => {
   if (userRole === 'admin') {
-    fetch('https://pwasb.onrender.com/api/users')
+    fetch('https://pwasb.onrender.com/api/subs/users')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener los usuarios');
