@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../App.css';
 import keys from "../../keys.json"; // Importa las llaves VAPID
 
 
 function Main() {
+  const [users, setUsers] = useState([]);
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole'); // Obtener el rol del usuario
 console.log('ID del usuario:', userId);
+
+useEffect(() => {
+  if (userRole === 'admin') {
+    fetch('https://pwasb.onrender.com/api/users')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al obtener los usuarios');
+        }
+        return response.json();
+      })
+      .then(data => setUsers(data))
+      .catch(error => console.error('Error al cargar los usuarios:', error));
+  }
+}, [userRole]);
 
 
   navigator.serviceWorker.register('./sw.js',{type:'module'})
@@ -67,16 +82,13 @@ console.log('ID del usuario:', userId);
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Juan Pérez</td>
-              <td>juan@example.com</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>María Gómez</td>
-              <td>maria@example.com</td>
-            </tr>
+            {users.map(user => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.nombre}</td>
+                <td>{user.email}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       )}
