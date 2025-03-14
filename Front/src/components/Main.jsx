@@ -16,7 +16,6 @@ useEffect(() => {
         if (!response.ok) {
           throw new Error('Error al obtener los usuarios');
         }
-        console.log(data);
         return response.json();
       })
       .then(data => setUsers(data))
