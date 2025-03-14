@@ -1,7 +1,7 @@
 
 
 self.addEventListener('install',event=>{
-    caches.open('appShell-v5')
+    caches.open('appShell-v6')
     .then(cache=>{
         cache.addAll([
             "/index.html",  
@@ -24,8 +24,8 @@ function InsertIndexedDB(data){
 
     db.onupgradeneeded = event => {
         let db = event.target.result;
-        if (!db.objectStoreNames.contains("Libros")) {
-            db.createObjectStore("Libros", { keyPath: "id", autoIncrement: true });
+        if (!db.objectStoreNames.contains("Usuarios")) {
+            db.createObjectStore("Usuarios", { keyPath: "id", autoIncrement: true });
         }
     };
 
@@ -33,15 +33,15 @@ function InsertIndexedDB(data){
     {
         let result=event.target.result;
 
-        let transaction=result.transaction("Libros","readwrite");
-        let obj=transaction.objectStore("Libros");
+        let transaction=result.transaction("Usuarios","readwrite");
+        let obj=transaction.objectStore("Usuarios");
 
         const resultado=obj.add(data);
 
         resultado.onsuccess=event2=>
         {
             //console.log("insersion",event2.target.result);
-            self.registration.sync.register("syncLibros");
+            self.registration.sync.register("syncUsuarios");
         }
     }
     
@@ -52,8 +52,8 @@ function InsertIndexedDB(data){
 
 
 self.addEventListener("activate",event=>{
-    caches.delete("appShell-v4");
-    caches.delete("dinamico-v4");
+    caches.delete("appShell-v5");
+    caches.delete("dinamico-v5");
 });
 
 
@@ -81,7 +81,7 @@ self.addEventListener('fetch', event=>{
             if(!resp){
                 return caches.match(event.request);
             }else{
-               caches.open('dinamico-v5')
+               caches.open('dinamico-v6')
                .then(cache=>{
                 cache.put(event.request, resp);
                 })
@@ -114,27 +114,27 @@ self.addEventListener("push", (event) => {
 
 // Escuchar evento de sincronización
 self.addEventListener('sync', event => {
-    if (event.tag === "syncLibros") {
+    if (event.tag === "syncUsuarios") {
         event.waitUntil(
             new Promise((resolve, reject) => {
                 let dbRequest = indexedDB.open("database", 1);
 
                 dbRequest.onsuccess = event => {
                     let db = event.target.result;
-                    let transaction = db.transaction("Libros", "readonly");
-                    let store = transaction.objectStore("Libros");
+                    let transaction = db.transaction("Usuarios", "readonly");
+                    let store = transaction.objectStore("Usuarios");
 
                     let getAllRequest = store.getAll();
 
                     getAllRequest.onsuccess = () => {
-                        let libros = getAllRequest.result;
-                        if (libros.length === 0) {
+                        let Usuarios = getAllRequest.result;
+                        if (Usuarios.length === 0) {
                             resolve();
                             return;
                         }
 
-                        let postPromises = libros.map(libro =>
-                            fetch('/api/libros', {
+                        let postPromises = Usuarios.map(libro =>
+                            fetch('https://pwasb.onrender.com/api/subs/registro', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(libro)
@@ -143,8 +143,8 @@ self.addEventListener('sync', event => {
 
                         Promise.all(postPromises)
                             .then(() => {
-                                let deleteTransaction = db.transaction("Libros", "readwrite");
-                                let deleteStore = deleteTransaction.objectStore("Libros");
+                                let deleteTransaction = db.transaction("Usuarios", "readwrite");
+                                let deleteStore = deleteTransaction.objectStore("Usuarios");
                                 deleteStore.clear();
                                 resolve();
                             })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
 
@@ -11,17 +11,33 @@ function Register() {
   const [telefono, setTelefono] = useState('');
   const [nombre, setNombre] = useState('');
   const [error, setError] = useState('');
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+
+  
+  useEffect(() => {
+    window.addEventListener("online", () => setIsOnline(true));
+    window.addEventListener("offline", () => setIsOnline(false));
+
+    return () => {
+      window.removeEventListener("online", () => setIsOnline(true));
+      window.removeEventListener("offline", () => setIsOnline(false));
+    };
+  }, []);
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
+    //if (isOnline) {
+      
     try {
+
       const response = await fetch('https://pwasb.onrender.com/api/subs/registro', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ nombre, telefono, email, password }),
+        body: JSON.stringify({ email, nombre, password }),
       });
 
       const data = await response.json();
@@ -35,17 +51,31 @@ function Register() {
       }
     } catch (err) {
       setError('No se pudo conectar al servidor. Inténtalo nuevamente.');
-    }
+    } 
   };
+  
 
 
   function InsertIndexedDB(data) {
     let dbRequest = window.indexedDB.open("database");
+    dbRequest.onupgradeneeded = event => {
+      let db = event.target.result;
+      if (!db.objectStoreNames.contains("Usuarios")) {
+        db.createObjectStore("Usuarios", { keyPath: "email" });
+      }
+    };
 
     dbRequest.onsuccess = event => {
         let db = event.target.result;
-        let transaction = db.transaction("Libros", "readwrite");
-        let objStore = transaction.objectStore("Libros");
+
+            // Verificamos que el object store exista antes de hacer la transacción
+        if (!db.objectStoreNames.contains("Usuarios")) {
+          console.error("❌ El object store 'Usuarios' no existe.");
+          return;
+        }
+
+        let transaction = db.transaction("Usuarios", "readwrite");
+        let objStore = transaction.objectStore("Usuarios");
 
         let addRequest = objStore.add(data);
 
@@ -56,7 +86,7 @@ function Register() {
                 navigator.serviceWorker.ready
                     .then(registration => {
                         console.log("Intentando registrar la sincronización...");
-                        return registration.sync.register("syncLibros");
+                        return registration.sync.register("syncUsuarios");
                     })
                     .then(() => {
                         console.log("✅ Sincronización registrada con éxito");
@@ -95,16 +125,6 @@ function Register() {
           />
         </div>
         <div className="form-group">
-          <label>Telefono:</label>
-          <input
-            type="number"
-            value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
-            placeholder="Ingresa tu Telefono"
-            //required
-          />
-        </div>
-        <div className="form-group">
           <label>Email:</label>
           <input
             type="email"
@@ -132,9 +152,7 @@ function Register() {
       <p className="link">
         ¿Ya tienes cuenta? <span onClick={() => navigate('/login')}>Inicia sesión aquí</span>
       </p>
-      <button  onClick={()=>InsertIndexedDB({nombre:"pablo",password:"hola"})} className="button">
-          Registrarse
-        </button>
+    
        
     </div>
   );
