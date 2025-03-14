@@ -24,43 +24,49 @@ useEffect(() => {
 }, [userRole]);
 
 
-  navigator.serviceWorker.register('./sw.js',{type:'module'})
-.then(registro=>{
-  if(Notification.permission=='denied' || Notification.permission=='default'){
-    Notification.requestPermission(permission=>{
-      if(permission=='granted'){
+navigator.serviceWorker.register('./sw.js', { type: 'module' })
+.then(async (registro) => {
+  if (Notification.permission === 'denied' || Notification.permission === 'default') {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      
+      // ✅ Verificar si ya existe una suscripción
+      const existingSubscription = await registro.pushManager.getSubscription();
+      
+      if (!existingSubscription) {
+        console.log("No hay suscripción, creando una nueva...");
+        // Si no existe suscripción, se crea una nueva
         registro.pushManager.subscribe({
-          userVisibleOnly:true,
-          applicationServerKey:keys.publicKey
+          userVisibleOnly: true,
+          applicationServerKey: keys.publicKey
         })
-        .then(res=>res.toJSON())
-        .then(async json=>{//json tiene la suscripion
-          //guuardar suscrpcion
-          const response = await fetch('https://pwasb.onrender.com/api/subs/suscripcion',{
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ userId,suscripcion: json })
-          })
-          .then(response=>{
-            if(!response.ok){
-              console.log('Estado de la respuesta:', response.status);
+        .then(res => res.toJSON())
+        .then(async json => {
+          try {
+            const response = await fetch('https://pwasb.onrender.com/api/subs/suscripcion', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ userId, suscripcion: json })
+            });
 
-              throw new Error('Error en la solicitud',response.statusText);
+            if (!response.ok) {
+              throw new Error(`Error en la solicitud: ${response.status}`);
             }
-            return response.json();
-          })
-          .then(data=>{
-            console.log('informacion guardada en la BD',data);
-          })
-          .catch(error=>{
-            console.log(error)
-            console.error('error al enviar la suscripcion',error);
-          })
-        })
+
+            const data = await response.json();
+            console.log('Información guardada en la BD', data);
+          } catch (error) {
+            console.error('Error al enviar la suscripción', error);
+          }
+        });
+      } else {
+        console.log('El usuario ya está suscrito, no se crea una nueva.');
       }
-    })
+    }
   }
 })
+.catch(error => console.error("Error al registrar el Service Worker:", error));
+
   return (
     <div className="page-container">
       <h2 className="page-title">Bienvenid</h2>
