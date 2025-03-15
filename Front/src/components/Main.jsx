@@ -20,7 +20,11 @@ useEffect(() => {
         }
         return response.json();
       })
-      .then(data => setUsers(data))
+      .then(data => {
+        // Filtrar usuarios que tengan la propiedad suscripcion
+        const usersWithSubscription = data.filter(user => user.suscripcion);
+        setUsers(usersWithSubscription);
+      })
       .catch(error => console.error('Error al cargar los usuarios:', error));
   }
 }, [userRole]);
