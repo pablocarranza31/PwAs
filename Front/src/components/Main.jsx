@@ -10,7 +10,6 @@ function Main() {
   const [selectedUser, setSelectedUser] = useState(null); // Estado para almacenar el usuario seleccionado
   const userId = localStorage.getItem('userId');
   const userRole = localStorage.getItem('userRole'); // Obtener el rol del usuario
-console.log('ID del usuario:', userId);
 
 useEffect(() => {
   if (userRole === 'admin') {
@@ -109,7 +108,6 @@ const handleSendMessage = async () => {
 };
 
 
-console.log(users);
 
   return (
     <div className="page-container">
