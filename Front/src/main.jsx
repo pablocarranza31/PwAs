@@ -4,11 +4,11 @@ import "./index.css";
 import App from "./App.jsx";
 import keys from "../keys.json"; // Importa las llaves VAPID
 
-// navigator.serviceWorker.register('./sw.js', { type: 'module' })
-//   .then((registro) => {
-//     //console.log("Service Worker registrado correctamente:", registro);
-//   })
-//   .catch(error => console.error("Error al registrar el Service Worker:", error));
+navigator.serviceWorker.register('./sw.js', { type: 'module' })
+   .then((registro) => {
+     //console.log("Service Worker registrado correctamente:", registro);
+   })
+ .catch(error => console.error("Error al registrar el Service Worker:", error));
 
 
 
