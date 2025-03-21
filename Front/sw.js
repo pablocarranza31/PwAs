@@ -128,7 +128,11 @@ self.addEventListener('sync', event => {
 
                     getAllRequest.onsuccess = () => {
                         let Usuarios = getAllRequest.result;
+                        console.log("🔄 Intentando sincronizar usuarios:", Usuarios);
+
                         if (Usuarios.length === 0) {
+                            console.log("✅ No hay usuarios pendientes de sincronización.");
+
                             resolve();
                             return;
                         }
@@ -143,6 +147,8 @@ self.addEventListener('sync', event => {
 
                         Promise.all(postPromises)
                             .then(() => {
+                                console.log("✅ Usuarios sincronizados con éxito.");
+
                                 let deleteTransaction = db.transaction("Usuarios", "readwrite");
                                 let deleteStore = deleteTransaction.objectStore("Usuarios");
                                 deleteStore.clear();
