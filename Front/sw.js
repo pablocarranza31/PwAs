@@ -20,7 +20,7 @@ self.addEventListener('install',event=>{
 })
 
 function InsertIndexedDB(data){
-    let db=window.indexedDB.open("database");
+    let db = indexedDB.open("database"); // Eliminamos window.
 
     db.onupgradeneeded = event => {
         let db = event.target.result;
