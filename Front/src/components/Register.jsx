@@ -26,8 +26,16 @@ function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+
+    const userData = { email, nombre, password };
+
   
-    //if (isOnline) {
+    if (!isOnline) {
+      console.warn("⚠️ No hay conexión. Guardando en IndexedDB...");
+      InsertIndexedDB(userData);
+      alert("Registro guardado offline. Se enviará cuando haya internet.");
+      return;
+  }
       
     try {
 
@@ -36,7 +44,7 @@ function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, nombre, password }),
+        body: JSON.stringify(userData),
       });
 
       const data = await response.json();
@@ -87,7 +95,7 @@ function Register() {
                         console.log("Intentando registrar la sincronización...");
                         return registration.sync.register("syncUsuarios");
                     })
-                    .then(() => {
+                    .then(() => { 
                         console.log("✅ Sincronización registrada con éxito");
                     })
                     .catch(err => {
