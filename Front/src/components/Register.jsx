@@ -8,7 +8,6 @@ function Register() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [telefono, setTelefono] = useState('');
   const [nombre, setNombre] = useState('');
   const [error, setError] = useState('');
   const [isOnline, setIsOnline] = useState(navigator.onLine);
